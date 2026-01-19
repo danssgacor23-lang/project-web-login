@@ -1,0 +1,29 @@
+"use client";
+import { useState } from "react";
+
+export default function CreateUser() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [day, setDay] = useState(1);
+
+  async function submit() {
+    const res = await fetch("/api/create-user", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, expired_day: Number(day) })
+    });
+
+    const data = await res.json();
+    alert(data.message);
+  }
+
+  return (
+    <div style={{ padding: 40 }}>
+      <h2>Create User</h2>
+      <input placeholder="Username" onChange={e=>setUsername(e.target.value)} /><br/>
+      <input placeholder="Password" onChange={e=>setPassword(e.target.value)} /><br/>
+      <input placeholder="Expired day (0 = permanent)" onChange={e=>setDay(e.target.value)} /><br/>
+      <button onClick={submit}>Create</button>
+    </div>
+  );
+}
